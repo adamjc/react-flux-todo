@@ -12,11 +12,41 @@
 
     <script type="text/jsx">
         var TodoItem = React.createClass({
+            handleInput: function (e) {
+                this.setState({text: e.target.value});
+
+                if (e.keyCode === 13) {
+                    AppDispatcher.dispatch({
+                        eventName: 'update-todo',
+                        todo: {
+                            id: this.props.data.id,
+                            text: e.target.value,
+                            complete: this.props.complete
+                        }
+                    });
+                }                
+            },
+
+            toggleComplete: function (e) {
+                AppDispatcher.dispatch({
+                    eventName: 'update-todo',
+                    todo: {
+                        id: this.props.data.id,
+                        text: this.props.data.text,
+                        complete: e.target.checked
+                    }
+                });
+            },
+
             render: function () {
                 return (
-                    <div>
+                    <li key={this.props.data.id}>
+                        <input value={this.props.data.text} onChange={this.handleInput} />
 
-                    </div>
+                        <input type="checkbox"
+                               onChange={this.toggleComplete}
+                               checked={this.props.data.complete} />
+                    </li>
                 );
             }
         });
@@ -35,18 +65,19 @@
 
             todosChanged: function () {
                 this.setState({ todos: TodoStore.getAll() });
-
-                console.log(this.state.todos);
             },
 
             addTodo: function (e) {
-                AppDispatcher.dispatch({
-                    eventName: 'new-todo',
-                    newTodo: {
-                        name: this.state.text,
-                        complete: false
-                    }
-                });
+                if (this.state.text) {
+                    AppDispatcher.dispatch({
+                        eventName: 'new-todo',
+                        newTodo: {
+                            id: this.state.todos.length,
+                            text: this.state.text,
+                            complete: false
+                        }
+                    });
+                }
             },
 
             handleInput: function (e) {
@@ -63,9 +94,18 @@
 
                 return (
                     <div>
-                        <input onChange={ this.handleInput } onKeyDown={ this.handleInput } value={ text } placeholder={ this.state.placeholder } />
+                        <input onChange={ this.handleInput }
+                               onKeyDown={ this.handleInput }
+                               value={ text }
+                               placeholder={ this.state.placeholder } />
+
                         <button onClick={ this.addTodo }>New Item</button>
-                        <span>{ this.state.todos ? this.state.todos.length : 0 }</span>
+
+                        <ul>
+                            {this.state.todos.map(function (todo) {
+                                return <TodoItem key={todo.id} data={todo} />;
+                            })}
+                        </ul>
                     </div>
                 );
             }
