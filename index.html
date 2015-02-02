@@ -23,7 +23,10 @@
 
         var Todo = React.createClass({
             getInitialState: function () {
-                return { placeholder: 'Enter Todo...' };
+                return {
+                    placeholder: 'Enter Todo...',
+                    todos: TodoStore.getAll()
+                };
             },
 
             componentDidMount: function () {
@@ -32,6 +35,8 @@
 
             todosChanged: function () {
                 this.setState({ todos: TodoStore.getAll() });
+
+                console.log(this.state.todos);
             },
 
             addTodo: function (e) {
