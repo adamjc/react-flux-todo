@@ -1,0 +1,85 @@
+<html>
+<head>
+    <script src="lib/Dispatcher.js"></script>
+    <script src="lib/microevent.js"></script>
+    <script src="src/test.js"></script>
+    <script src="http://fb.me/react-0.12.2.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+</head>
+<body>
+    <div id="main"></div>
+
+    <script type="text/jsx">
+        var TodoItem = React.createClass({
+            render: function () {
+                return (
+                    <div>
+
+                    </div>
+                );
+            }
+        });
+
+        var Todo = React.createClass({
+            getInitialState: function () {
+                return { placeholder: 'Enter Todo...' };
+            },
+
+            componentDidMount: function () {
+                TodoStore.bind('change', this.todosChanged);
+            },
+
+            todosChanged: function () {
+                this.setState({ todos: TodoStore.getAll() });
+            },
+
+            addTodo: function (e) {
+                AppDispatcher.dispatch({
+                    eventName: 'new-todo',
+                    newTodo: {
+                        name: this.state.text,
+                        complete: false
+                    }
+                });
+            },
+
+            handleInput: function (e) {
+                this.setState({ text: e.target.value });
+
+                if (e.keyCode === 13) {
+                    this.addTodo();
+                    this.setState({ text: '' });
+                }
+            },
+
+            render: function () {
+                var text = this.state.text
+
+                return (
+                    <div>
+                        <input onChange={ this.handleInput } onKeyDown={ this.handleInput } value={ text } placeholder={ this.state.placeholder } />
+                        <button onClick={ this.addTodo }>New Item</button>
+                        <span>{ this.state.todos ? this.state.todos.length : 0 }</span>
+                    </div>
+                );
+            }
+        });
+
+        var App = React.createClass({
+            render: function () {
+                return (
+                    <div className="App">
+                        <Todo />
+                    </div>
+                );
+            }
+        });
+
+        React.render(
+            <App />,
+            document.getElementById('main')
+        );
+    </script>
+</body>
+</html>
