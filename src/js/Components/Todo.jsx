@@ -2,6 +2,7 @@ var React = require('react');
 var TodoStore = require('../Stores/TodoStore.js');
 var TodoItem = require('./TodoItem.jsx');
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js');
+var TodoActions = require('../Actions/TodoActions.js');
 
 module.exports = React.createClass({
     getInitialState: function () {
@@ -20,17 +21,18 @@ module.exports = React.createClass({
     },
 
     addTodo: function (e) {
-        this.setState({text: ''});
-
         if (this.state.text) {
-            AppDispatcher.dispatch({
-                eventName: 'new-todo',
-                todo: {
-                    text: this.state.text,
-                    complete: false
-                }
-            });
+            var todo = {
+                text: this.state.text,
+                complete: false
+            };
+
+            TodoActions.add(todo);
         }
+    },
+
+    removeCompletedTodos: function (e) {
+        TodoActions.removeCompleted();
     },
 
     handleInput: function (e) {
@@ -44,7 +46,6 @@ module.exports = React.createClass({
 
     render: function () {
         var text = this.state.text
-
         var todoList = [];
         var todos = TodoStore.getAll();
 
@@ -60,6 +61,8 @@ module.exports = React.createClass({
                        placeholder={this.state.placeholder} />
 
                 <button onClick={this.addTodo}>New Item</button>
+
+                <button onClick={this.removeCompletedTodos}>Delete Completed Todos</button>
 
                 <ul>
                     {todoList}

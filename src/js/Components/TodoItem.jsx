@@ -1,6 +1,7 @@
 var React = require('react');
 var TodoInput = require('./TodoInput.jsx');
 var AppDispatcher = require('../Dispatcher/AppDispatcher.js');
+var TodoActions = require('../Actions/TodoActions.js');
 
 module.exports = React.createClass({
     getInitialState: function () {
@@ -13,26 +14,24 @@ module.exports = React.createClass({
         this.setState({ text: e.target.value});
 
         if (e.keyCode === 13) {
-            AppDispatcher.dispatch({
-                eventName: 'update-todo',
-                todo: {
-                    id: this.props.data.id,
-                    text: e.target.value,
-                    complete: this.props.complete
-                }
-            });
+            var todo = {
+                id: this.props.data.id,
+                text: e.target.value,
+                complete: this.props.complete
+            }
+
+            TodoActions.update(todo);
         }
     },
 
     toggleComplete: function (e) {
-        AppDispatcher.dispatch({
-            eventName: 'update-todo',
-            todo: {
-                id: this.props.data.id,
-                text: this.props.data.text,
-                complete: e.target.checked
-            }
-        });
+        var todo = {
+            id: this.props.data.id,
+            text: this.props.data.text,
+            complete: e.target.checked
+        };
+
+        TodoActions.update(todo);
     },
 
     render: function () {
@@ -61,16 +60,13 @@ module.exports = React.createClass({
                        onChange={this.toggleComplete}
                        checked={todo.complete} />
 
-                   <button onClick={this.delete}>delete</button>
+                   <button onClick={this.remove}>delete</button>
             </li>
         );
     },
 
-    delete: function () {
-        AppDispatcher.dispatch({
-            eventName: 'delete-todo',
-            todoId: this.props.data.id
-        });
+    remove: function () {
+        TodoActions.remove(this.props.data.id);
     },
 
     onDoubleClick: function (e) {
@@ -78,14 +74,13 @@ module.exports = React.createClass({
     },
 
     onSave: function (inputText) {
-        AppDispatcher.dispatch({
-            eventName: 'update-todo',
-            todo: {
-                id: this.props.data.id,
-                text: inputText,
-                complete: this.props.complete
-            }
-        });
+        var todo = {
+            id: this.props.data.id,
+            text: inputText,
+            complete: this.props.complete
+        };
+
+        TodoActions.update(todo);
 
         this.setState({isEditing: false});
     }
