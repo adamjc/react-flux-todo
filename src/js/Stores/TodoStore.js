@@ -6,18 +6,32 @@ var CHANGE_EVENT = 'change';
 
 var todos = {};
 
+/**
+ * add - adds a todo item to the TodoStore.
+ *
+ * @param {todo} todo - a todo object
+ */
 var add = function(todo) {
-    var id = new Date().getTime();
+    // Attempts to generate a unique number... not guaranteed!
+    var id = Math.floor(Math.random() * new Date().getTime());
 
     todo.id = id;
 
     todos[id] = todo;
 };
 
+/**
+ * remove - removes a todo item from the TodoStore
+ *
+ * @param {int} todoId - the key of the todo item to remove.
+ */
 var remove = function(todoId) {
     delete todos[todoId];
 };
 
+/**
+ * removeCompleted - removes all completed todos from the TodoStore
+ */
 var removeCompleted = function () {
     for (var todo in todos) {
         if (todos[todo].complete) {
@@ -26,6 +40,11 @@ var removeCompleted = function () {
     }
 };
 
+/**
+ * update - updates a todo with new properties
+ *
+ * @param {todo} todo - the new todo to replace the old one.
+ */
 var update = function(todo) {
     todos[todo.id] = todo;
 };
@@ -45,16 +64,16 @@ var TodoStore = assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function (action) {
-    switch (action.eventName) {
-        case 'add-todo':
+    switch (action.actionType) {
+        case 'add':
             // Add a new todo item.
             add(action.todo);
             break;
-        case 'update-todo':
+        case 'update':
             // Update a todo item.
             update(action.todo);
             break;
-        case 'remove-todo':
+        case 'remove':
             // Delete a todo item.
             remove(action.todoId);
             break;

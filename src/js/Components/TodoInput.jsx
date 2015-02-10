@@ -34,6 +34,5 @@ module.exports = React.createClass({
         var value = this.state.value !== '' ? this.state.value : this.props.value;
 
         this.props.onSave(value);
-        this.setState({value: ''});
     }
 });

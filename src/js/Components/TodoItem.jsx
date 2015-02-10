@@ -41,8 +41,7 @@ module.exports = React.createClass({
         var className = "todo-item-text";
 
         if (this.state.isEditing) {
-            displayText =
-                <TodoInput className={className} onSave={this.onSave} value={todo.text} />;
+            displayText = <TodoInput className={className} onSave={this.onSave} value={todo.text} />;
         } else {
             className += todo.complete ? ' todo-item-text--complete' : '';
 

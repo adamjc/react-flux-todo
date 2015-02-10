@@ -1,0 +1,32 @@
+{
+  "name": "flux-test",
+  "version": "1.0.0",
+  "description": "1. clone into a directory.\r 2. `npm install`\r 3. `gulp`\r 4. open up `dist/index.html` in your favourite browser",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "del": "^1.1.1",
+    "flux": "^2.0.1",
+    "browserify": "^8.1.3",
+    "gulp": "^3.8.10",
+    "gulp-sass": "^1.3.2",
+    "object-assign": "^2.0.0",
+    "jest-cli": "^0.2.2",
+    "react": "^0.12.2",
+    "reactify": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adamjc/react-flux-todo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamjc/react-flux-todo/issues"
+  },
+  "homepage": "https://github.com/adamjc/react-flux-todo"
+}
